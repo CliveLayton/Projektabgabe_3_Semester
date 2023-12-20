@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ public class UIController : MonoBehaviour
 {
     public static UIController instance;
 
-   [SerializeField] private Text text;
+   [SerializeField] private TextMeshProUGUI text;
    [SerializeField] private GameObject gameOverScreen;
    [SerializeField] private RectTransform inventoryParent;
    [SerializeField] private WeaponInventoryEntry entryPrefab;
