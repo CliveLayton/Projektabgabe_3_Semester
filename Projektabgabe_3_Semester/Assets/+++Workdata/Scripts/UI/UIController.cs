@@ -16,12 +16,16 @@ public class UIController : MonoBehaviour
    private int score;
    private List<WeaponInventoryEntry> weaponEntries = new List<WeaponInventoryEntry>();
 
+   //turns the game over panel of
+   //activates ongamestatechanged function
    private void Awake()
    {
       gameOverScreen.SetActive(false);
       GameLoopManager.onGameStateChange += OnGameStateChanged;
    }
 
+   //gets the player axis controller from player to get and add functions for
+   //adding weapon, remove weapon and switch active weapon
    private void Start()
    {
       PlayerAxisController controller = PlayerManager.GetPlayerController();
@@ -36,6 +40,7 @@ public class UIController : MonoBehaviour
       OnActiveWeaponSwitched(controller.GetEquippedWeapon());
    }
 
+   //if object get destroyed, deactivate all added functions above
    private void OnDestroy()
    {
       GameLoopManager.onGameStateChange -= OnGameStateChanged;
@@ -49,27 +54,40 @@ public class UIController : MonoBehaviour
       }
    }
 
+   //if gamestate changed to gameover, turns the gameoverscreen on
    private void OnGameStateChanged(GameLoopManager.GameState newState)
    {
       gameOverScreen.SetActive(newState == GameLoopManager.GameState.GameOver);
    }
 
+   /// <summary>
+   /// get the function from gameloopmanager to start new game
+   /// </summary>
    public void StartNewGame()
    {
       GameLoopManager.StartNewGame();
    }
 
+   /// <summary>
+   /// gets the function from gameloopmanager to enter main menu
+   /// </summary>
    public void EnterMainMenu()
    {
       GameLoopManager.EnterMainMenu();
    }
 
+   //set instance to this script
+   //set the score text to "0 points"
    private void OnEnable()
    {
       instance = this;
       text.text = "0 Points";
    }
 
+   /// <summary>
+   /// sets the text to the variable of points
+   /// </summary>
+   /// <param name="points">int</param>
    public void IncreaseScore(int points)
    {
       if (text == null)
@@ -80,6 +98,7 @@ public class UIController : MonoBehaviour
       text.text = score + " Points";
    }
 
+   //add new weaponinventoryentry to the UI if player collect a new weapon
    private void OnWeaponAdded(Weapon weapon)
    {
       WeaponInventoryEntry newEntry = Instantiate(entryPrefab, inventoryParent);
@@ -87,6 +106,7 @@ public class UIController : MonoBehaviour
       weaponEntries.Add(newEntry);
    }
 
+   //destroy/remove a weaponinventoryentry from the ui if player loose a weapon
    private void OnWeaponRemoved(Weapon weapon)
    {
       for (int index = weaponEntries.Count -1; index >= 0; index--)
@@ -99,6 +119,7 @@ public class UIController : MonoBehaviour
       }
    }
 
+   //sets the selected weapon in the inventory to the active weapon in the list
    private void OnActiveWeaponSwitched(Weapon weapon)
    {
       foreach (var entry in weaponEntries)
